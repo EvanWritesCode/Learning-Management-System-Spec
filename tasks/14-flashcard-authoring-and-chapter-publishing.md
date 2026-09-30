@@ -1,0 +1,17 @@
+# Task 14 — Flashcard authoring and chapter publishing
+
+## Context and dependencies
+Tasks 07, 10–13 implement chapter and material/question editing. A chapter is not available for normal study until published. Flashcard review behavior is Task 21.
+
+## Work
+Add front/back Markdown flashcard create/edit/reorder/delete controls. Add a chapter readiness panel: nonempty title, at least one active material, at least one question, all referenced objectives present, valid answer keys/rubrics, passing percentage between 0 and 100, and every PDF placeholder resolved. Show uncovered-objective warnings without blocking publication. Publish a new chapter at revision 1.
+
+For version 1, edits to a published chapter become visible after a successful save. Enforce readiness for every published-content mutation in the database transaction, including child insert/update/delete and PDF deletion initiation; UI checks alone are insufficient. Serialize mutations for a chapter so concurrent deletions cannot each pass a stale readiness check. Reject an invalid edit, preserve the current published content, and retain the user's editor input with a precise error. In particular, reject deletion of the last material or question. Intentional deletion of the whole chapter/course uses the separate deletion workflow and is not blocked by readiness checks.
+
+Every successful logical save that adds, removes, or changes material, question, or objective content, or changes passPercent, increments the chapter revision exactly once in the same transaction. No-op and failed saves do not increment it. A changed material also increments its own content_revision; a threshold-only edit leaves material revisions and reading completion marks intact but requires a fresh passing attempt for the new chapter revision. Flashcard, title, and position-only edits do not increment the chapter revision. Apply these rules consistently to Tasks 07 and 10–13, including PDF replacement and deletion; asynchronous file cleanup does not increment the revision again. Historical attempts retain their question and passPercent snapshots. Draft chapters may be previewed by their owner but do not count toward course completion. Implement course publication once it has at least one published chapter.
+
+## Verification
+Attempt to publish with missing question, missing material, unresolved PDF, and invalid objective reference; each is blocked with a precise reason. Publish a valid chapter and confirm revision 1. Through both UI and direct authenticated API calls, attempt to delete the last question/material, introduce an unresolved PDF, or invalidate an objective reference in a published chapter; verify rollback and unchanged revision. Race two deletions against a two-item chapter and verify at least one valid item remains. Confirm whole-chapter/course deletion still works through the deletion workflow. Edit published reading/test content and confirm revision increments once and old attempts remain readable. Change only passPercent from 80 to 90: verify a prior 80% pass remains historical, no longer completes the current chapter, and reading marks remain complete. Also test lowering the threshold, no-op/failed saves, and flashcard/title-only edits. Test card CRUD and ordering.
+
+## Done when
+Publication has deterministic readiness rules, cards are authorable, and edits to studied content update revision without destroying attempt history.

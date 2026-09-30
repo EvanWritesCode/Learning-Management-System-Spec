@@ -1,0 +1,23 @@
+Learning and Professional Development Navigator.
+
+The purpose of this assist and administer a user's learning and knowledge of a particular topic.  The focus should be long form learning such as in depth topics and semester long classes.   Think of existing learning platforms like Khan Academy and Coursera, except where those are primarily video driven,  this should support heavy text and reading in addition to videos and other learning formats.
+For presenting and tracking learning: 
+Present learning material to a user in a structured, chapter based fashion.
+Testing knowledge and recall is critical to understanding and long-term retention:  the application should thoroughly test the user's knowledge through in depth tests for each chapter.  
+Keep track of the user's progress through the learning material and allow the user to pick up where they left off.
+Present the user with multiple types of learning material:  long form text based stored locally,  external learning videos from external sites like youtube that are viewed inside the app without leaving,  text based learning material hosted outside the application, like an article.  Also self contained file-based content such as PDFs that can be embedded. 
+The application should allow that content to be read inline wherever possible,  whether it is copying the content or using an inline viewer like an iframe or similar
+The application should provide flash-card functionality for recall practice.
+
+Creating the learning content.
+Users can create new classes and are responsible for providing all class learning material.
+The application should provide a course builder feature to assist in importing content and authoring the class.
+The application will not use LLM models at runtime at this time.  However,  users on their own can and should use frontier LLM models to generate curriculum.   
+To facilitate this, the application will provide a concrete schema and prompt assistance to generate portions of the learning content.
+
+
+Technical Requirements.
+
+The application should be available as both an android app and a website.  
+The backend should use a backend-as-a-service with a generous free tier.  Please propose options and make the case for the best option in your evaluation.
+The frontend should use a free application site hosting platform with a generous free tier.  Please propose options and make the case for the best option in your evaluation.
